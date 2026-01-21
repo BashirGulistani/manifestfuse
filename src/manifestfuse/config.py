@@ -22,3 +22,17 @@ class FuseConfig:
 
 
 
+def _coerce_list(v: Any) -> list[str]:
+    if v is None:
+        return []
+    if isinstance(v, list):
+        return [str(x) for x in v]
+    return [str(v)]
+
+
+
+
+
+
+
+

@@ -25,6 +25,17 @@ def discover_files(root: str, includes: list[str], excludes: list[str]) -> list[
     return sorted(out)
 
 
+def discover_assets(root: str, asset_dirs: list[str]) -> list[str]:
+    r = Path(root).resolve()
+    assets: list[str] = []
+    for d in asset_dirs:
+        p = r / d
+        if not p.exists():
+            continue
+        for f in p.rglob("*"):
+            if f.is_file():
+                assets.append(str(f))
+    return sorted(set(assets))
 
 
 

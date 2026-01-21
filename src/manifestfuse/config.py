@@ -32,7 +32,24 @@ def _coerce_list(v: Any) -> list[str]:
 
 
 
+def load_config(path: str | None) -> FuseConfig:
+    if not path:
+        return FuseConfig()
 
+    p = Path(path)
+    if not p.exists():
+        return FuseConfig()
+
+    raw = yaml.safe_load(p.read_text(encoding="utf-8")) or {}
+    cfg = FuseConfig()
+
+    cfg.project_root = str(raw.get("project_root", cfg.project_root))
+    cfg.scan_include = _coerce_list(raw.get("scan_include", cfg.scan_include))
+    cfg.scan_exclude = _coerce_list(raw.get("scan_exclude", cfg.scan_exclude))
+    cfg.asset_dirs = _coerce_list(raw.get("asset_dirs", cfg.asset_dirs))
+    cfg.output_dir = str(raw.get("output_dir", cfg.output_dir))
+    cfg.write_delete_plan = bool(raw.get("write_delete_plan", cfg.write_delete_plan))
+    return cfg
 
 
 

@@ -1,0 +1,20 @@
+[build-system]
+requires = ["setuptools>=68", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "manifestfuse"
+version = "0.1.0"
+description = "Build an asset reference manifest for Liquid/HTML/CSS/JS projects, with unused + duplicate detection."
+readme = "README.md"
+requires-python = ">=3.10"
+license = { text = "MIT" }
+authors = [{ name = "ManifestFuse Contributors" }]
+keywords = ["assets", "manifest", "shopify", "liquid", "dead-code", "duplicates", "static-analysis"]
+dependencies = ["pyyaml>=6.0.1"]
+
+[project.scripts]
+manifestfuse = "manifestfuse.cli:main"
+
+[tool.setuptools.packages.find]
+where = ["src"]

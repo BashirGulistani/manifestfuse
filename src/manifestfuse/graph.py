@@ -65,3 +65,27 @@ def build_manifest(root: str, scan_include: list[str], scan_exclude: list[str], 
     unresolved_refs: Set[str] = set()
 
 
+
+    for f in scan_files:
+        relf = _rel(root, f)
+        text = _read_text(f)
+        refs = extract_refs_from_text(text)
+        all_refs |= refs
+
+        resolved = []
+        unresolved = []
+        for r in refs:
+            m = _best_match_asset(asset_rel, r)
+            if m:
+                resolved.append(m)
+                resolved_used.add(m)
+            else:
+                unresolved.append(r)
+                unresolved_refs.add(r)
+
+        graph[relf] = {
+            "refs": sorted(refs),
+            "resolved_assets": sorted(set(resolved)),
+            "unresolved_refs": sorted(set(unresolved)),
+        }
+

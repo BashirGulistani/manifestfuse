@@ -17,6 +17,12 @@ def _read_text(path: str) -> str:
         return Path(path).read_text(encoding="latin-1")
 
 
+def _rel(root: str, path: str) -> str:
+    r = Path(root).resolve()
+    p = Path(path).resolve()
+    return str(p.relative_to(r)).replace("\\", "/")
+
+
 
 
 

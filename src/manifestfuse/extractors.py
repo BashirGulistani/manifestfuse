@@ -35,6 +35,30 @@ def extract_refs_from_text(text: str) -> Set[str]:
     for m in LIQUID_STYLESHEET_TAG_RE.finditer(text):
         refs.add(_normalize_ref(m.group(1)))
 
+    for m in CSS_URL_RE.finditer(text):
+        v = _normalize_ref(m.group(1))
+        if v.startswith("data:"):
+            continue
+        refs.add(v)
+
+    for m in HTML_SRC_RE.finditer(text):
+        refs.add(_normalize_ref(m.group(1)))
+
+    for m in HTML_SRCSET_RE.finditer(text):
+        raw = m.group(1)
+        for part in raw.split(","):
+            url = part.strip().split(" ", 1)[0]
+            if url:
+                refs.add(_normalize_ref(url))
+
+    for m in JS_IMPORT_RE.finditer(text):
+        refs.add(_normalize_ref(m.group(1)))
+
+    for m in JS_FETCH_RE.finditer(text):
+        refs.add(_normalize_ref(m.group(1)))
+
+    return {r for r in refs if r}
+
 
 
 

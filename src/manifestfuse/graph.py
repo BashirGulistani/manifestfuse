@@ -10,6 +10,13 @@ from .fingerprints import file_sha256
 
 
 
+def _read_text(path: str) -> str:
+    try:
+        return Path(path).read_text(encoding="utf-8")
+    except UnicodeDecodeError:
+        return Path(path).read_text(encoding="latin-1")
+
+
 
 
 

@@ -20,6 +20,20 @@ LIQUID_STYLESHEET_TAG_RE = re.compile(r"""['"]([^'"]+\.css(?:\.liquid)?)['"]\s*\
 
 
 
+def _normalize_ref(ref: str) -> str:
+    ref = (ref or "").strip()
+    ref = ref.split("#", 1)[0].split("?", 1)[0]
+    return ref
+
+
+def extract_refs_from_text(text: str) -> Set[str]:
+    refs: Set[str] = set()
+
+    for m in LIQUID_ASSET_RE.finditer(text):
+        refs.add(_normalize_ref(m.group(1)))
+
+    for m in LIQUID_STYLESHEET_TAG_RE.finditer(text):
+        refs.add(_normalize_ref(m.group(1)))
 
 
 

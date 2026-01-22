@@ -89,3 +89,25 @@ def build_manifest(root: str, scan_include: list[str], scan_exclude: list[str], 
             "unresolved_refs": sorted(set(unresolved)),
         }
 
+
+    unused = sorted(asset_rel - resolved_used)
+
+    by_hash: Dict[str, List[str]] = {}
+    for ar, h in asset_hash.items():
+        by_hash.setdefault(h, []).append(ar)
+    duplicates = {h: sorted(paths) for h, paths in by_hash.items() if len(paths) > 1}
+
+    return {
+        "root": root,
+        "files_scanned": len(scan_files),
+        "assets_total": len(asset_rel),
+        "assets_used": len(resolved_used),
+        "assets_unused": len(unused),
+        "graph": graph,
+        "used_assets": sorted(resolved_used),
+        "unused_assets": unused,
+        "unresolved_refs": sorted(unresolved_refs),
+        "duplicates": duplicates,
+    }
+
+

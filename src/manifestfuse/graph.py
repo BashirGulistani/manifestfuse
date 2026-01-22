@@ -51,5 +51,17 @@ def _best_match_asset(asset_rel_paths: Set[str], ref: str) -> str | None:
 
 
 
+def build_manifest(root: str, scan_include: list[str], scan_exclude: list[str], asset_dirs: list[str]) -> dict:
+    root = str(Path(root).resolve())
+    scan_files = discover_files(root, scan_include, scan_exclude)
+    assets = discover_assets(root, asset_dirs)
+
+    asset_rel = {_rel(root, a) for a in assets}
+    asset_hash = {ar: file_sha256(str(Path(root) / ar)) for ar in asset_rel}
+
+    graph = {}
+    all_refs: Set[str] = set()
+    resolved_used: Set[str] = set()
+    unresolved_refs: Set[str] = set()
 
 

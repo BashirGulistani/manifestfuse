@@ -9,3 +9,8 @@ class TestExtractors(unittest.TestCase):
         refs = extract_refs_from_text(t)
         self.assertIn("main.css", refs)
 
+    def test_css_url(self):
+        t = """.x{ background:url('/assets/a.png?v=1'); }"""
+        refs = extract_refs_from_text(t)
+        self.assertIn("/assets/a.png", refs)
+

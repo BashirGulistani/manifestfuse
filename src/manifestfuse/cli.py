@@ -21,3 +21,27 @@ def main() -> None:
     args = ap.parse_args()
 
 
+    cfg = load_config(args.config)
+    cfg.project_root = args.project_root
+    root = str(Path(cfg.project_root).resolve())
+    outdir = Path(root) / (args.out or cfg.output_dir)
+    outdir.mkdir(parents=True, exist_ok=True)
+
+    payload = build_manifest(
+        root=root,
+        scan_include=cfg.scan_include,
+        scan_exclude=cfg.scan_exclude,
+        asset_dirs=cfg.asset_dirs,
+    )
+
+    write_json(str(outdir / "manifest.json"), payload)
+    write_html(str(outdir / "report.html"), payload)
+
+    if cfg.write_delete_plan and payload.get("unused_assets"):
+        write_delete_plan(str(outdir / "delete_plan.sh"), payload["root"], payload["unused_assets"])
+
+    print("Done.")
+    print(f"- manifest: {outdir / 'manifest.json'}")
+    print(f"- report:   {outdir / 'report.html'}")
+    if cfg.write_delete_plan:
+        print(f"- plan:     {outdir / 'delete_plan.sh'}")

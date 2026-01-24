@@ -14,3 +14,12 @@ class TestExtractors(unittest.TestCase):
         refs = extract_refs_from_text(t)
         self.assertIn("/assets/a.png", refs)
 
+    def test_srcset(self):
+        t = """<img srcset="a.png 1x, b.png 2x" />"""
+        refs = extract_refs_from_text(t)
+        self.assertIn("a.png", refs)
+        self.assertIn("b.png", refs)
+
+
+if __name__ == "__main__":
+    unittest.main()

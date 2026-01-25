@@ -14,5 +14,11 @@ def ensure_parent(path: Path) -> None:
 
 
 
+def write_json(path: str, payload: Payload) -> None:
+    p = Path(path)
+    ensure_parent(p)
+    with p.open("w", encoding="utf-8") as f:
+        json.dump(payload, f, indent=2)
+        f.write("\n")
 
 

@@ -61,6 +61,50 @@ def write_html(path: str, payload: Payload) -> None:
     }
     
 
+    def render_list(items: List[str], limit: int = 2000) -> str:
+        return "".join(f"<li><code>{html.escape(str(x))}</code></li>" for x in items[:limit])
+
+    css = textwrap.dedent("""
+        body{font-family:system-ui,-apple-system,sans-serif;margin:24px;background:#0b0b0b;color:#eee}
+        .card{background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.12);border-radius:14px;padding:14px;margin:12px 0}
+        h1{margin:0 0 6px;font-size:22px} h2{margin:0 0 10px;font-size:16px}
+        .muted{color:#b9b9b9;font-size:13px}
+        code{font-family:ui-monospace,monospace}
+        details{margin-top:8px} summary{cursor:pointer} ul{margin:8px 0 0 18px}
+    """).strip()
+
+    body_content = f"""
+    <h1>ManifestFuse Report</h1>
+    <div class="muted">Root: {html.escape(root)}</div>
+
+    <div class="card">
+      <h2>Overview</h2>
+      <div class="muted">
+        files scanned: {stats['files_scanned']}<br/>
+        assets total: {stats['assets_total']}<br/>
+        assets used: {stats['assets_used']}<br/>
+        assets unused: {stats['assets_unused']}
+      </div>
+    </div>
+
+    <div class="card">
+      <h2>Unused assets ({len(payload.get("unused_assets", []))})</h2>
+      <details open>
+        <summary>Show list</summary>
+        <ul>{render_list(payload.get("unused_assets", []))}</ul>
+      </details>
+    </div>
+
+    <div class="card">
+      <h2>Unresolved references ({len(payload.get("unresolved_refs", []))})</h2>
+      <div class="muted">References not matching local assets.</div>
+      <details>
+        <summary>Show list</summary>
+        <ul>{render_list(payload.get("unresolved_refs", []))}</ul>
+      </details>
+    </div>
+    """
+
 
 
 

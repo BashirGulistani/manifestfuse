@@ -104,7 +104,27 @@ def write_html(path: str, payload: Payload) -> None:
       </details>
     </div>
     """
+    dups = payload.get("duplicates", {})
+    dup_items = []
+    for k, vals in list(dups.items())[:200]:
+        dup_items.append(
+            f"<div style='margin:10px 0'><div class='muted'>hash: {html.escape(k)}</div>"
+            f"<ul>{render_list(vals)}</ul></div>"
+        )
+    
+    dup_section = f"""
+    <div class="card">
+      <h2>Duplicates ({len(dups)})</h2>
+      <div class="muted">Byte-identical files.</div>
+      <details>
+        <summary>Show groups</summary>
+        {"".join(dup_items)}
+      </details>
+    </div>
+    """
 
+    final_html = f"<!doctype html><html><head><meta charset='utf-8'/><style>{css}</style></head><body>{body_content}{dup_section}</body></html>"
+    p.write_text(final_html, encoding="utf-8")
 
 
 

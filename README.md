@@ -13,3 +13,17 @@ You get:
 - a manifest file (references graph)
 - a list of used assets
 - a list of unused assets
+- duplicate detection (byte-identical files)
+- a simple HTML report you can hand to someone else
+- an optional interactive delete plan script
+
+This is static analysis, not browser coverage. The point is to get you 80–90% of the way there fast, with a clear audit trail.
+
+---
+
+## Install
+
+From source:
+
+```bash
+pip install -e .

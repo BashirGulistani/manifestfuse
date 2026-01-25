@@ -48,5 +48,24 @@ def write_delete_plan(path: str, root: str, unused_assets: List[str]) -> None:
 
 
 
+def write_html(path: str, payload: Payload) -> None:
+    p = Path(path)
+    ensure_parent(p)
+
+    root = payload.get("root", "Unknown")
+    stats = {
+        "files_scanned": payload.get("files_scanned", 0),
+        "assets_total": payload.get("assets_total", 0),
+        "assets_used": payload.get("assets_used", 0),
+        "assets_unused": payload.get("assets_unused", 0),
+    }
+    
+
+
+
+
+
+
+
 
 
